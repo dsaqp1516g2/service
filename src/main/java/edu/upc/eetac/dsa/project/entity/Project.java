@@ -15,10 +15,19 @@ public class Project {
     private List<Link> links;
 
     private String id;
+    private String adminId;
     private String name;
     private String description;
     private long creationTimestamp;
     private String repoUrl;
+
+    public String getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
+    }
 
     public List<Link> getLinks() {
         return links;
