@@ -1,0 +1,10 @@
+[
+  {
+    "path": "users",
+    "methods": ["POST"]
+  },
+  {
+    "path": "login",
+    "methods": ["POST"]
+  }
+]

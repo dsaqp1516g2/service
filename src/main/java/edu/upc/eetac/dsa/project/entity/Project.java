@@ -18,7 +18,7 @@ public class Project {
     private String adminId;
     private String name;
     private String description;
-    private long creationTimestamp;
+    private String creationTimestamp;
     private String repoUrl;
 
     public String getAdminId() {
@@ -61,11 +61,11 @@ public class Project {
         this.description = description;
     }
 
-    public long getCreationTimestamp() {
+    public String getCreationTimestamp() {
         return creationTimestamp;
     }
 
-    public void setCreationTimestamp(long creationTimestamp) {
+    public void setCreationTimestamp(String creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
 

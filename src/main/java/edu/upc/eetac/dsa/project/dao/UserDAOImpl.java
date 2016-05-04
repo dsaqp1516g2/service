@@ -17,7 +17,7 @@ public class UserDAOImpl implements UserDAO {
 
     //TODO implementar crear y actualizar usuario con githubauth
     @Override
-    public User createUser(String loginid, String password, String email, String fullname, String githubAuth) throws SQLException, UserAlreadyExistsException {
+    public User createUser(String loginid, String password, String email, String fullname, String githubauth) throws SQLException, UserAlreadyExistsException {
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -44,6 +44,7 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(3, password);
             stmt.setString(4, email);
             stmt.setString(5, fullname);
+            stmt.setString(6, githubauth); //TODO: esto hay que guardarlo de otra forma
             stmt.executeUpdate();
 
             stmt.close();
@@ -138,7 +139,6 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement stmt = null;
         try {
             connection = Database.getConnection();
-
 
             stmt = connection.prepareStatement(UserDAOQuery.GET_USER_BY_USERNAME);
             stmt.setString(1, loginid);
