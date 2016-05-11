@@ -11,23 +11,23 @@ import java.util.List;
  */
 public class UserInfo implements Principal {
 
-    private String name;
+    private String userid;
     private List<Role> roles = new ArrayList<>();
 
     public UserInfo() {
     }
 
     public UserInfo(String name) {
-        this.name = name;
+        this.userid = name;
     }
 
     @Override
     public String getName() {
-        return name;
+        return userid;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.userid = name;
     }
 
     public List<Role> getRoles() {

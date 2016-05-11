@@ -16,10 +16,19 @@ public class Project {
 
     private String id;
     private String adminId;
+    private String adminName;
     private String name;
     private String description;
     private String creationTimestamp;
     private String repoUrl;
+
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
 
     public String getAdminId() {
         return adminId;

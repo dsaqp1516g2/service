@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 public class ProjectDAOImpl implements ProjectDAO {
     @Override
-    public Project createProject(String name, String description, String repoUrl) throws SQLException {
+    public Project createProject(String name, String description, String repoUrl, String adminId) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -35,9 +35,12 @@ public class ProjectDAOImpl implements ProjectDAO {
             stmt.setString(2, name);
             stmt.setString(3, description); //TODO: probarque pasa si description es null
             stmt.setString(4, repoUrl);
+            stmt.setString(5, adminId);
             stmt.executeUpdate();
 
-            connection.commit();
+            //TODO: cuando se crea el projecto hay que meter al admin como miembro
+
+
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -79,6 +82,9 @@ public class ProjectDAOImpl implements ProjectDAO {
                 project.setName(rs.getString("name"));
                 project.setCreationTimestamp(rs.getString("creation_timestamp"));
                 project.setRepoUrl(rs.getString("repo_url"));
+                project.setDescription((rs.getString("description")));
+                project.setAdminId(rs.getString("adminId"));
+                project.setAdminName(rs.getString("adminName"));
             }
         } catch (SQLException e) {
             throw e;
