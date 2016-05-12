@@ -9,4 +9,6 @@ public interface ProjectDAOQuery {
             "projects (id, name, description, repo_url, admin_userid) " +
             "values (unhex(?), ?, ?, ?, unhex(?))";
     public final static String GET_PROJECT_BY_ID = "select hex(p.id) as id, p.name, p.description, p.repo_url, p.creation_timestamp, hex(p.admin_userid) as adminId, u.fullname as adminName from projects p, users u where p.id=unhex(?) and u.id=p.admin_userid";
+    public final static String CHECK_MEMBERSHIP = "select hex(p.userid) as userid from user_projects as p where p.userid=UNHEX(?) and p.projectid=UNHEX(?)";
+    public final static String ADD_MEMBER = "insert into user_projects (userid, projectid) values (UNHEX(?), UNHEX(?))";
 }

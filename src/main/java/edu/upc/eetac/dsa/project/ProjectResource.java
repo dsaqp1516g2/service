@@ -52,4 +52,27 @@ public class ProjectResource {
             throw new NotFoundException("Project with id = "+id+" doesn't exist");
         return project;
     }
+
+    @Path("/{id}/members")
+    @POST
+    public Response addMember(@PathParam("id") String id, @Context UriInfo uriInfo) throws URISyntaxException{
+        String userid = securityContext.getUserPrincipal().getName();
+        Project project = null;
+        ProjectDAO projectDAO = new ProjectDAOImpl();
+
+        try {
+            project = projectDAO.getProjectById(id);
+            if(project == null)
+                throw new BadRequestException("project id doesn't exist");
+            if(projectDAO.checkMembership(userid,id))
+                throw new WebApplicationException("user is already a member", Response.Status.CONFLICT);
+            projectDAO.joinProject(userid, id);
+
+        } catch (SQLException e){
+            throw new InternalServerErrorException();
+        }
+
+        URI uri = new URI(uriInfo.getBaseUri().toString() + "/projectos/" + project.getId());
+        return Response.created(uri).type(ProjectMediaType.PROJECT_PROJECT).entity(project).build();
+    }
 }

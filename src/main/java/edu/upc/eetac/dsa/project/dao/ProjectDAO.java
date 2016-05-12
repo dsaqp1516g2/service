@@ -14,4 +14,6 @@ public interface ProjectDAO {
     public boolean deleteProject() throws SQLException;
     public Project getProjectById(String id) throws SQLException;
     public ProjectCollection getUserProjects() throws SQLException;
+    public boolean checkMembership(String userId, String projectId) throws SQLException;
+    public void joinProject(String userid, String projectid) throws SQLException;
 }

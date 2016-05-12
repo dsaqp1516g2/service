@@ -99,4 +99,47 @@ public class ProjectDAOImpl implements ProjectDAO {
     public ProjectCollection getUserProjects() throws SQLException {
         return null;
     }
+
+    @Override
+    public boolean checkMembership(String userId, String projectId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(ProjectDAOQuery.CHECK_MEMBERSHIP);
+            stmt.setString(1, userId);
+            stmt.setString(2, projectId);
+
+            ResultSet rs = stmt.executeQuery();
+            return(rs.next());
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public void joinProject(String userid, String projectid) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(ProjectDAOQuery.ADD_MEMBER);
+            stmt.setString(1, userid);
+            stmt.setString(2, projectid);
+
+            int rows = stmt.executeUpdate();
+            //TODO: control de errores??
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
 }
