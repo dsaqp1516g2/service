@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class TaskDAOImpl implements TaskDAO {
     @Override
-    public Task createTask(String title, String creatorId, String description) throws SQLException {
+    public Task createTask(String projectid, String title, String creatorId, String description) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -34,11 +34,12 @@ public class TaskDAOImpl implements TaskDAO {
             stmt.close();
             stmt = connection.prepareStatement(TaskDAOQuery.CREATE_TASK);
             stmt.setString(1, id);
-            stmt.setString(2, creatorId);
-            stmt.setString(3, title);
-            stmt.setString(4, description);
-            stmt.setString(5, null);
+            stmt.setString(2, projectid);
+            stmt.setString(3, creatorId);
+            stmt.setString(4, title);
+            stmt.setString(5, description);
             stmt.setString(6, null);
+            stmt.setString(7, null);
             stmt.executeUpdate();
 
             connection.commit();
@@ -65,8 +66,48 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public TaskCollection getTasksFromProject() throws SQLException {
-        return null;
+    public TaskCollection getTasksFromProject(String projectid) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        TaskCollection tasks = new TaskCollection();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(TaskDAOQuery.GET_TASKS_FROM_PROJECT);
+            stmt.setString(1, projectid);
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                Task task = new Task();
+                task.setId(rs.getString("id"));
+                task.setProjectid(rs.getString("projectid"));
+                task.setTitle(rs.getString("title"));
+                task.setDescription(rs.getString("description"));
+                TaskState state = null;
+                switch(rs.getString("state")){
+                    case "in_proces":
+                        state = TaskState.in_process;
+                        break;
+                    case "completed":
+                        state = TaskState.completed;
+                        break;
+                    case "proposal":
+                        state = TaskState.proposal;
+                        break;
+                }
+                task.setState(state);
+                //TODO: label
+                task.setCreationTimestamp(rs.getString("creation_timestamp"));
+                tasks.getTasks().add(task);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+        return tasks;
     }
 
     @Override
@@ -85,6 +126,7 @@ public class TaskDAOImpl implements TaskDAO {
             if (rs.next()) {
                 task = new Task();
                 task.setId(rs.getString("id"));
+                task.setProjectid(rs.getString("projectid"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
                 TaskState state = null;

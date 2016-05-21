@@ -8,6 +8,8 @@ public interface ProjectMediaType {
     public final static String PROJECT_USER = "application/vnd.dsa.project.user+json";
     public final static String PROJECT_PROJECT = "application/vnd.dsa.project.project+json";
     public final static String PROJECT_TASK = "application/vnd.dsa.project.task+json";
+    public final static String PROJECT_PROJECT_COLLECTION = "application/vnd.dsa.project.project.collection+json";
+    public final static String PROJECT_TASK_COLLECTION = "application/vnd.dsa.project.task.collection+json";
 
 
 }

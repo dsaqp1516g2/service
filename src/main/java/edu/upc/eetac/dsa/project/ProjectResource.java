@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.project;
 import edu.upc.eetac.dsa.project.dao.ProjectDAO;
 import edu.upc.eetac.dsa.project.dao.ProjectDAOImpl;
 import edu.upc.eetac.dsa.project.entity.Project;
+import edu.upc.eetac.dsa.project.entity.ProjectCollection;
 import edu.upc.eetac.dsa.project.entity.ProjectMediaType;
 
 import javax.ws.rs.*;
@@ -31,6 +32,8 @@ public class ProjectResource {
 
         try {
             project = projectDAO.createProject(name, description, repourl, securityContext.getUserPrincipal().getName()); //TODO rehacer con parametros
+            //el que crea el proyecto se añade como miembro automaticamente
+            projectDAO.joinProject(securityContext.getUserPrincipal().getName(), project.getId());
         } catch (SQLException e){
             throw new InternalServerErrorException();
         }
@@ -53,8 +56,21 @@ public class ProjectResource {
         return project;
     }
 
+    @GET
+    @Produces(ProjectMediaType.PROJECT_PROJECT_COLLECTION)
+    public ProjectCollection getMyProjects() {
+        ProjectCollection projects = null;
+        try {
+            projects = (new ProjectDAOImpl()).getMemberProjects(securityContext.getUserPrincipal().getName());
+        } catch (SQLException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
+        return projects;
+    }
+
     @Path("/{id}/members")
     @POST
+    @Produces(ProjectMediaType.PROJECT_PROJECT)
     public Response addMember(@PathParam("id") String id, @Context UriInfo uriInfo) throws URISyntaxException{
         String userid = securityContext.getUserPrincipal().getName();
         Project project = null;

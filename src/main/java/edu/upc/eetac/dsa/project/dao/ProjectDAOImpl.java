@@ -96,8 +96,37 @@ public class ProjectDAOImpl implements ProjectDAO {
     }
 
     @Override
-    public ProjectCollection getUserProjects() throws SQLException {
-        return null;
+    public ProjectCollection getMemberProjects(String userid) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ProjectCollection projects = new ProjectCollection();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(ProjectDAOQuery.GET_PROJECTS_FROM_MEMBER);
+            stmt.setString(1, userid);
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                Project project = new Project();
+                project.setId(rs.getString("id"));
+                project.setName(rs.getString("name"));
+                project.setCreationTimestamp(rs.getString("creation_timestamp"));
+                project.setRepoUrl(rs.getString("repo_url"));
+                project.setDescription((rs.getString("description")));
+                project.setAdminId(rs.getString("adminId"));
+                project.setAdminName(rs.getString("adminName"));
+                projects.getProjects().add(project);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+        return projects;
     }
 
     @Override

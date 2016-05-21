@@ -13,7 +13,7 @@ public interface ProjectDAO {
     public Project updateProject() throws SQLException;
     public boolean deleteProject() throws SQLException;
     public Project getProjectById(String id) throws SQLException;
-    public ProjectCollection getUserProjects() throws SQLException;
+    public ProjectCollection getMemberProjects(String userid) throws SQLException;
     public boolean checkMembership(String userId, String projectId) throws SQLException;
     public void joinProject(String userid, String projectid) throws SQLException;
 }

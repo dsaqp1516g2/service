@@ -6,6 +6,7 @@ import edu.upc.eetac.dsa.project.dao.TaskDAO;
 import edu.upc.eetac.dsa.project.dao.TaskDAOImpl;
 import edu.upc.eetac.dsa.project.entity.ProjectMediaType;
 import edu.upc.eetac.dsa.project.entity.Task;
+import edu.upc.eetac.dsa.project.entity.TaskCollection;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -40,11 +41,25 @@ public class TaskResource {
             if(!projectDAO.checkMembership(userid, projectId))
                 throw new ForbiddenException("operation not allowed");
             //TODO: de momento no introducimos label (bug o enhancement) y el dueTimestamp
-            task = taskDAO.createTask(title, userid, description);
+            task = taskDAO.createTask(projectId, title, userid, description);
         } catch (SQLException e){
             throw new InternalServerErrorException();
         }
         URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + task.getId());
         return Response.created(uri).type(ProjectMediaType.PROJECT_TASK).entity(task).build();
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(ProjectMediaType.PROJECT_TASK_COLLECTION)
+    public TaskCollection getProjectTasks(@PathParam("projectid") String projectid) {
+        //TODO Error handling
+        TaskCollection tasks = null;
+        try {
+            tasks = (new TaskDAOImpl()).getTasksFromProject(projectid);
+        } catch (SQLException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
+        return tasks;
     }
 }

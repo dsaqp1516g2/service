@@ -10,10 +10,10 @@ import java.sql.SQLException;
  * Created by carlos on 21/04/16.
  */
 public interface TaskDAO {
-    public Task createTask(String title, String creatorId, String description) throws SQLException;
+    public Task createTask(String projectid, String title, String creatorId, String description) throws SQLException;
     public Task updateTask() throws SQLException;
     public boolean deleteTask() throws SQLException;
-    public TaskCollection getTasksFromProject() throws SQLException;
+    public TaskCollection getTasksFromProject(String projectid) throws SQLException;
     public Task getTaskById(String id) throws SQLException;
     public Task updateTaskState() throws SQLException;
 }

@@ -15,6 +15,7 @@ public class Task {
     private List<Link> links;
 
     private String id;
+    private String projectid;
     private String title;
     private String creator_id;
     private TaskState state;
@@ -22,6 +23,14 @@ public class Task {
     private String creationTimestamp;
     private String dueTimestamp;
     private Label label;
+
+    public String getProjectid() {
+        return projectid;
+    }
+
+    public void setProjectid(String projectid) {
+        this.projectid = projectid;
+    }
 
     public String getTitle() {
         return title;
