@@ -15,9 +15,27 @@ public class ChecklistItem {
     @InjectLinks({})
     private List<Link> links;
 
+    private String id;
+    private String taskid;
     private String title;
     private boolean checked;
     private String user_checked;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTaskid() {
+        return taskid;
+    }
+
+    public void setTaskid(String taskid) {
+        this.taskid = taskid;
+    }
 
     public List<Link> getLinks() {
         return links;

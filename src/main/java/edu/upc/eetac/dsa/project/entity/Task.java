@@ -23,6 +23,15 @@ public class Task {
     private String creationTimestamp;
     private String dueTimestamp;
     private Label label;
+    private String creatorName;
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
 
     public String getProjectid() {
         return projectid;

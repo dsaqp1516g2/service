@@ -155,6 +155,8 @@ public class TaskDAOImpl implements TaskDAO {
                 }
                 */
                 task.setLabel(label);
+                task.setCreator_id(rs.getString("creator_userid"));
+                task.setCreatorName(rs.getString("creator_name"));
                 task.setCreationTimestamp(rs.getString("creation_timestamp"));
             }
         } catch (SQLException e) {
