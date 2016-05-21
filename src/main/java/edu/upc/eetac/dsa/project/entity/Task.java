@@ -15,12 +15,21 @@ public class Task {
     private List<Link> links;
 
     private String id;
+    private String title;
     private String creator_id;
     private TaskState state;
     private String description;
-    private long creationTimestamp;
-    private long dueTimestamp;
+    private String creationTimestamp;
+    private String dueTimestamp;
     private Label label;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public List<Link> getLinks() {
         return links;
@@ -62,19 +71,19 @@ public class Task {
         this.description = description;
     }
 
-    public long getCreationTimestamp() {
+    public String getCreationTimestamp() {
         return creationTimestamp;
     }
 
-    public void setCreationTimestamp(long creationTimestamp) {
+    public void setCreationTimestamp(String creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
 
-    public long getDueTimestamp() {
+    public String getDueTimestamp() {
         return dueTimestamp;
     }
 
-    public void setDueTimestamp(long dueTimestamp) {
+    public void setDueTimestamp(String dueTimestamp) {
         this.dueTimestamp = dueTimestamp;
     }
 
