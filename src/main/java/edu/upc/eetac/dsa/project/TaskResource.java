@@ -50,10 +50,10 @@ public class TaskResource {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(ProjectMediaType.PROJECT_TASK_COLLECTION)
     public TaskCollection getProjectTasks(@PathParam("projectid") String projectid) {
-        //TODO Error handling
+        if(projectid == null)
+            throw new BadRequestException("projectid not speficied");
         TaskCollection tasks = null;
         try {
             tasks = (new TaskDAOImpl()).getTasksFromProject(projectid);
@@ -61,5 +61,21 @@ public class TaskResource {
             throw new InternalServerErrorException(e.getMessage());
         }
         return tasks;
+    }
+
+    @Path("/{id}")
+    @GET
+    @Produces(ProjectMediaType.PROJECT_TASK)
+    public Task getTaskById(@PathParam("id") String taskid) {
+        if(taskid == null)
+            throw new BadRequestException("id parameter not speficied");
+
+        Task task = null;
+        try {
+            task = (new TaskDAOImpl()).getTaskById(taskid);
+        } catch (SQLException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
+        return task;
     }
 }
