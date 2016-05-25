@@ -23,15 +23,15 @@ public class ProjectResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(ProjectMediaType.PROJECT_PROJECT)
-    public Response createProject(@FormParam("name") String name, @FormParam("description") String description, @FormParam("repourl") String repourl, @Context UriInfo uriInfo) throws URISyntaxException {
-        if(name == null || repourl == null) // la descripción es opcional
+    public Response createProject(@FormParam("name") String name, @FormParam("description") String description, @FormParam("repoOwner") String repoOwner, @FormParam("repoName") String repoName, @Context UriInfo uriInfo) throws URISyntaxException {
+        if(name == null || repoOwner == null || repoName == null) // la descripción es opcional
             throw new BadRequestException("all parameters are mandatory");
 
         ProjectDAO projectDAO = new ProjectDAOImpl();
         Project project = null;
 
         try {
-            project = projectDAO.createProject(name, description, repourl, securityContext.getUserPrincipal().getName()); //TODO rehacer con parametros
+            project = projectDAO.createProject(name, description, repoOwner, repoName, securityContext.getUserPrincipal().getName()); //TODO rehacer con parametros
             //el que crea el proyecto se añade como miembro automaticamente
             projectDAO.joinProject(securityContext.getUserPrincipal().getName(), project.getId());
         } catch (SQLException e){

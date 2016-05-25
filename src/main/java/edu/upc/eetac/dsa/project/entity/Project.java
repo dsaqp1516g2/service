@@ -20,7 +20,8 @@ public class Project {
     private String name;
     private String description;
     private String creationTimestamp;
-    private String repoUrl;
+    private String repoOwner;
+    private String repoName;
 
     public String getAdminName() {
         return adminName;
@@ -78,11 +79,19 @@ public class Project {
         this.creationTimestamp = creationTimestamp;
     }
 
-    public String getRepoUrl() {
-        return repoUrl;
+    public String getRepoOwner() {
+        return repoOwner;
     }
 
-    public void setRepoUrl(String repoUrl) {
-        this.repoUrl = repoUrl;
+    public void setRepoOwner(String repoOwner) {
+        this.repoOwner = repoOwner;
+    }
+
+    public String getRepoName() {
+        return repoName;
+    }
+
+    public void setRepoName(String repoName) {
+        this.repoName = repoName;
     }
 }

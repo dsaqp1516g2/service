@@ -1,7 +1,7 @@
 package edu.upc.eetac.dsa.project;
 
 import edu.upc.eetac.dsa.project.dao.AuthTokenDAOImpl;
-import edu.upc.eetac.dsa.project.dao.UserAlreadyExistsException;
+import edu.upc.eetac.dsa.project.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.project.dao.UserDAO;
 import edu.upc.eetac.dsa.project.dao.UserDAOImpl;
 import edu.upc.eetac.dsa.project.entity.AuthToken;
@@ -10,6 +10,7 @@ import edu.upc.eetac.dsa.project.entity.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -32,11 +33,18 @@ public class UserResource {
         User user = null;
         AuthToken authenticationToken = null;
         try{
+            if(!(new GithubExternalService()).checkUserAndPass(githubauth))
+            {
+                throw new BadRequestException("Invalid github auth");
+            }
             user = userDAO.createUser(loginid, password, email, fullname, githubauth);
             authenticationToken = (new AuthTokenDAOImpl()).createAuthToken(user.getId());
         }catch (UserAlreadyExistsException e){
             throw new WebApplicationException("loginid already exists", Response.Status.CONFLICT);
         }catch(SQLException e){
+            throw new InternalServerErrorException();
+        }
+        catch(IOException e){
             throw new InternalServerErrorException();
         }
         URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + user.getId());

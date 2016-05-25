@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * Created by carlos on 21/04/16.
  */
 public interface ProjectDAO {
-    public Project createProject(String name, String description, String repoUrl, String adminId) throws SQLException;
+    public Project createProject(String name, String description, String repoOwner, String repoName, String adminId) throws SQLException;
     public Project updateProject() throws SQLException;
     public boolean deleteProject() throws SQLException;
     public Project getProjectById(String id) throws SQLException;

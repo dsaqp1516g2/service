@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.project.dao;
 
 import edu.upc.eetac.dsa.project.entity.User;
+import edu.upc.eetac.dsa.project.exceptions.UserAlreadyExistsException;
 
 import java.sql.SQLException;
 

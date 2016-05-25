@@ -1,15 +1,12 @@
 package edu.upc.eetac.dsa.project;
 
-import edu.upc.eetac.dsa.project.dao.ProjectDAO;
-import edu.upc.eetac.dsa.project.dao.ProjectDAOImpl;
-import edu.upc.eetac.dsa.project.dao.TaskDAO;
-import edu.upc.eetac.dsa.project.dao.TaskDAOImpl;
-import edu.upc.eetac.dsa.project.entity.ProjectMediaType;
-import edu.upc.eetac.dsa.project.entity.Task;
-import edu.upc.eetac.dsa.project.entity.TaskCollection;
+import edu.upc.eetac.dsa.project.dao.*;
+import edu.upc.eetac.dsa.project.entity.*;
+import edu.upc.eetac.dsa.project.exceptions.GithubServiceException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -41,10 +38,21 @@ public class TaskResource {
             if(!projectDAO.checkMembership(userid, projectId))
                 throw new ForbiddenException("operation not allowed");
             //TODO: de momento no introducimos label (bug o enhancement) y el dueTimestamp
+            Project project = projectDAO.getProjectById(projectId);
+            User user = (new UserDAOImpl()).getUserById(securityContext.getUserPrincipal().getName());
+            (new GithubExternalService()).createIssue(project.getRepoOwner(), project.getRepoName(), task, user.getGithubAuth());
             task = taskDAO.createTask(projectId, title, userid, description);
+
         } catch (SQLException e){
             throw new InternalServerErrorException();
         }
+        catch (IOException e){
+            throw new InternalServerErrorException();
+        }
+        catch (GithubServiceException e) {
+
+        }
+        //TODO: coger exceptions del checkmembership
         URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + task.getId());
         return Response.created(uri).type(ProjectMediaType.PROJECT_TASK).entity(task).build();
     }

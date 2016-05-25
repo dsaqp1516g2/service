@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa.project.dao;
+package edu.upc.eetac.dsa.project.exceptions;
 
 /**
  * Created by carlos on 21/04/16.

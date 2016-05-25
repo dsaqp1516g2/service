@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 public class ProjectDAOImpl implements ProjectDAO {
     @Override
-    public Project createProject(String name, String description, String repoUrl, String adminId) throws SQLException {
+    public Project createProject(String name, String description, String repoOwner, String repoName, String adminId) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -33,12 +33,11 @@ public class ProjectDAOImpl implements ProjectDAO {
             stmt = connection.prepareStatement(ProjectDAOQuery.CREATE_PROJECT);
             stmt.setString(1, id);
             stmt.setString(2, name);
-            stmt.setString(3, description); //TODO: probarque pasa si description es null
-            stmt.setString(4, repoUrl);
-            stmt.setString(5, adminId);
+            stmt.setString(3, description);
+            stmt.setString(4, repoOwner);
+            stmt.setString(5, repoName);
+            stmt.setString(6, adminId);
             stmt.executeUpdate();
-
-            //TODO: cuando se crea el projecto hay que meter al admin como miembro
 
 
         } catch (SQLException e) {
@@ -81,7 +80,8 @@ public class ProjectDAOImpl implements ProjectDAO {
                 project.setId(rs.getString("id"));
                 project.setName(rs.getString("name"));
                 project.setCreationTimestamp(rs.getString("creation_timestamp"));
-                project.setRepoUrl(rs.getString("repo_url"));
+                project.setRepoOwner(rs.getString("repo_owner"));
+                project.setRepoName(rs.getString("repo_name"));
                 project.setDescription((rs.getString("description")));
                 project.setAdminId(rs.getString("adminId"));
                 project.setAdminName(rs.getString("adminName"));
@@ -113,7 +113,8 @@ public class ProjectDAOImpl implements ProjectDAO {
                 project.setId(rs.getString("id"));
                 project.setName(rs.getString("name"));
                 project.setCreationTimestamp(rs.getString("creation_timestamp"));
-                project.setRepoUrl(rs.getString("repo_url"));
+                project.setRepoOwner(rs.getString("repo_owner"));
+                project.setRepoName(rs.getString("repo_name"));
                 project.setDescription((rs.getString("description")));
                 project.setAdminId(rs.getString("adminId"));
                 project.setAdminName(rs.getString("adminName"));
