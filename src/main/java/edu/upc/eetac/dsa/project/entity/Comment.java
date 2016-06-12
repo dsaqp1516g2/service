@@ -1,7 +1,6 @@
 package edu.upc.eetac.dsa.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import javafx.scene.Parent;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
