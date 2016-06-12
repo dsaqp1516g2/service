@@ -6,5 +6,9 @@
   {
     "path": "login",
     "methods": ["POST"]
+  },
+  {
+    "path": "myresource",
+    "methods": ["GET"]
   }
 ]
