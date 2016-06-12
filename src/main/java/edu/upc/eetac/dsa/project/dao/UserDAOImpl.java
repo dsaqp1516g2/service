@@ -118,6 +118,7 @@ public class UserDAOImpl implements UserDAO {
                 user.setLoginid(rs.getString("loginid"));
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
+                user.setGithubAuth(rs.getString("github_auth"));
             }
         } catch (SQLException e) {
             // Relanza la excepción
@@ -151,6 +152,7 @@ public class UserDAOImpl implements UserDAO {
                 user.setLoginid(rs.getString("loginid"));
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
+                user.setGithubAuth(rs.getString("github_auth"));
             }
         } catch (SQLException e) {
             throw e;
