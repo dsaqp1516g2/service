@@ -12,6 +12,7 @@ public interface ProjectMediaType {
     public final static String PROJECT_TASK_COLLECTION = "application/vnd.dsa.project.task.collection+json";
     public final static String PROJECT_CHECKLIST = "application/vnd.dsa.project.task.checklist+json";
     public final static String PROJECT_CHECKLIST_ITEM = "application/vnd.dsa.project.task.checklist.item+json";
+    public final static String PROJECT_CHECKLIST_ITEM_COLLECTION = "application/vnd.dsa.project.task.checklist.item.collection+json";
 
 
 }

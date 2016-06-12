@@ -37,7 +37,7 @@ public class GithubExternalService {
         }
     }
 
-    public void createIssue(String repoOwner, String repoName, Task task, String auth) throws IOException, GithubServiceException {
+    public void createIssue(String repoOwner, String repoName, Task task, String auth)  {
         try {
             URL url = new URL(BASE_URL + "/repos/"+repoOwner+"/"+repoName+"/issues");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -60,10 +60,12 @@ public class GithubExternalService {
             }
 
             conn.disconnect();
-
         }
         catch(IOException e){
-            throw e;
+
+        }
+        catch(Exception ex){
+
         }
     }
 }

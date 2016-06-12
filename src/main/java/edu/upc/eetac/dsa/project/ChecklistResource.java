@@ -5,6 +5,7 @@ import edu.upc.eetac.dsa.project.dao.ChecklistItemDAOImpl;
 import edu.upc.eetac.dsa.project.dao.TaskDAO;
 import edu.upc.eetac.dsa.project.dao.TaskDAOImpl;
 import edu.upc.eetac.dsa.project.entity.ChecklistItem;
+import edu.upc.eetac.dsa.project.entity.ChecklistitemCollection;
 import edu.upc.eetac.dsa.project.entity.ProjectMediaType;
 import edu.upc.eetac.dsa.project.entity.Task;
 
@@ -47,4 +48,41 @@ public class ChecklistResource {
         URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + item.getId());
         return Response.created(uri).type(ProjectMediaType.PROJECT_CHECKLIST_ITEM).entity(item).build();
     }
+
+    @GET
+    @Produces(ProjectMediaType.PROJECT_CHECKLIST_ITEM_COLLECTION)
+    public ChecklistitemCollection getItemsFromTask(@PathParam("taskid") String taskid) {
+
+        ChecklistItemDAO itemDAO = new ChecklistItemDAOImpl();
+        ChecklistitemCollection items = new ChecklistitemCollection();
+
+        try {
+            items = itemDAO.getChecklistItems(taskid);
+        } catch (SQLException e){
+            throw new InternalServerErrorException();
+        }
+        return items;
+    }
+
+    @Path("/{item_id}")
+    @POST
+    @Produces(ProjectMediaType.PROJECT_CHECKLIST_ITEM)
+    public ChecklistItem checkItem(@PathParam("taskid") String taskid, @PathParam("item_id") String itemId) {
+
+        ChecklistItemDAO itemDAO = new ChecklistItemDAOImpl();
+        ChecklistItem item = null;
+
+        String userid = securityContext.getUserPrincipal().getName();
+
+        try {
+            item = itemDAO.checkItem(itemId, userid);
+        } catch (SQLException e){
+            throw new InternalServerErrorException();
+        }
+        return item;
+    }
+
+
+
+
 }

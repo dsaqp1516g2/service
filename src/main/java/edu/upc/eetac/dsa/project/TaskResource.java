@@ -40,18 +40,13 @@ public class TaskResource {
             //TODO: de momento no introducimos label (bug o enhancement) y el dueTimestamp
             Project project = projectDAO.getProjectById(projectId);
             User user = (new UserDAOImpl()).getUserById(securityContext.getUserPrincipal().getName());
-            (new GithubExternalService()).createIssue(project.getRepoOwner(), project.getRepoName(), task, user.getGithubAuth());
             task = taskDAO.createTask(projectId, title, userid, description);
+            (new GithubExternalService()).createIssue(project.getRepoOwner(), project.getRepoName(), task, user.getGithubAuth());
 
         } catch (SQLException e){
             throw new InternalServerErrorException();
         }
-        catch (IOException e){
-            throw new InternalServerErrorException();
-        }
-        catch (GithubServiceException e) {
 
-        }
         //TODO: coger exceptions del checkmembership
         URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + task.getId());
         return Response.created(uri).type(ProjectMediaType.PROJECT_TASK).entity(task).build();
@@ -81,6 +76,37 @@ public class TaskResource {
         Task task = null;
         try {
             task = (new TaskDAOImpl()).getTaskById(taskid);
+        } catch (SQLException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
+        return task;
+    }
+
+    @Path("/{id}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(ProjectMediaType.PROJECT_TASK)
+    public Task updateTaskState(@PathParam("id") String taskid, @FormParam("state") String state) {
+        if(state == null)
+            throw new BadRequestException("id parameter not speficied");
+        TaskState taskState = null;
+        switch(state){
+            case "in_process":
+                taskState = TaskState.in_process;
+                break;
+            case "completed":
+                taskState = TaskState.completed;
+                break;
+            case "proposal":
+                taskState = TaskState.proposal;
+                break;
+        }
+        if(taskState == null)
+            throw new BadRequestException("invalid state");
+
+        Task task = null;
+        try {
+            task = (new TaskDAOImpl()).updateTaskState(taskState, taskid);
         } catch (SQLException e) {
             throw new InternalServerErrorException(e.getMessage());
         }

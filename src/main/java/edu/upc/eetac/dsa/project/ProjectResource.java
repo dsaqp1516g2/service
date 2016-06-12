@@ -2,9 +2,11 @@ package edu.upc.eetac.dsa.project;
 
 import edu.upc.eetac.dsa.project.dao.ProjectDAO;
 import edu.upc.eetac.dsa.project.dao.ProjectDAOImpl;
+import edu.upc.eetac.dsa.project.dao.UserDAOImpl;
 import edu.upc.eetac.dsa.project.entity.Project;
 import edu.upc.eetac.dsa.project.entity.ProjectCollection;
 import edu.upc.eetac.dsa.project.entity.ProjectMediaType;
+import edu.upc.eetac.dsa.project.entity.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -71,8 +73,8 @@ public class ProjectResource {
     @Path("/{id}/members")
     @POST
     @Produces(ProjectMediaType.PROJECT_PROJECT)
-    public Response addMember(@PathParam("id") String id, @Context UriInfo uriInfo) throws URISyntaxException{
-        String userid = securityContext.getUserPrincipal().getName();
+    public Response addMember(@PathParam("id") String id, @FormParam("loginid") String loginid, @Context UriInfo uriInfo) throws URISyntaxException{
+
         Project project = null;
         ProjectDAO projectDAO = new ProjectDAOImpl();
 
@@ -80,9 +82,12 @@ public class ProjectResource {
             project = projectDAO.getProjectById(id);
             if(project == null)
                 throw new BadRequestException("project id doesn't exist");
-            if(projectDAO.checkMembership(userid,id))
+            User user = (new UserDAOImpl()).getUserByLoginid(loginid);
+            if(user == null)
+                throw new BadRequestException("user doesn't exist");
+            if(projectDAO.checkMembership(user.getId(),id))
                 throw new WebApplicationException("user is already a member", Response.Status.CONFLICT);
-            projectDAO.joinProject(userid, id);
+            projectDAO.joinProject(user.getId(), id);
 
         } catch (SQLException e){
             throw new InternalServerErrorException();

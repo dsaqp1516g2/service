@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.project;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
@@ -15,5 +16,6 @@ public class ProjectResourceConfig extends ResourceConfig {
         packages("edu.upc.eetac.dsa.project.cors");
         register(RolesAllowedDynamicFeature.class);
         register(DeclarativeLinkingFeature.class);
+        register(JacksonFeature.class);
     }
 }

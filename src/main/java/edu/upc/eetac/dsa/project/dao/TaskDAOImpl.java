@@ -85,7 +85,7 @@ public class TaskDAOImpl implements TaskDAO {
                 task.setDescription(rs.getString("description"));
                 TaskState state = null;
                 switch(rs.getString("state")){
-                    case "in_proces":
+                    case "in_process":
                         state = TaskState.in_process;
                         break;
                     case "completed":
@@ -97,6 +97,8 @@ public class TaskDAOImpl implements TaskDAO {
                 }
                 task.setState(state);
                 //TODO: label
+                task.setCreator_id(rs.getString("creator_userid"));
+                task.setCreatorName(rs.getString("creator_name"));
                 task.setCreationTimestamp(rs.getString("creation_timestamp"));
                 tasks.getTasks().add(task);
             }
@@ -131,7 +133,7 @@ public class TaskDAOImpl implements TaskDAO {
                 task.setDescription(rs.getString("description"));
                 TaskState state = null;
                 switch(rs.getString("state")){
-                    case "in_proces":
+                    case "in_process":
                         state = TaskState.in_process;
                         break;
                     case "completed":
@@ -170,7 +172,29 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public Task updateTaskState() throws SQLException {
-        return null;
+    public Task updateTaskState(TaskState state, String taskid) throws SQLException {
+        Task task = null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(TaskDAOQuery.UPDATE_TASK_STATE);
+            stmt.setString(1, state.toString());
+            stmt.setString(2, taskid);
+
+
+            int rows = stmt.executeUpdate();
+            if (rows == 1)
+                task = getTaskById(taskid);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+        return task;
     }
 }

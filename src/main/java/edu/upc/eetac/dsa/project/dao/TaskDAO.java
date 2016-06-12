@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.project.dao;
 import edu.upc.eetac.dsa.project.entity.Label;
 import edu.upc.eetac.dsa.project.entity.Task;
 import edu.upc.eetac.dsa.project.entity.TaskCollection;
+import edu.upc.eetac.dsa.project.entity.TaskState;
 
 import java.sql.SQLException;
 
@@ -15,5 +16,5 @@ public interface TaskDAO {
     public boolean deleteTask() throws SQLException;
     public TaskCollection getTasksFromProject(String projectid) throws SQLException;
     public Task getTaskById(String id) throws SQLException;
-    public Task updateTaskState() throws SQLException;
+    public Task updateTaskState(TaskState state, String taskid) throws SQLException;
 }

@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.project.dao;
 
 import edu.upc.eetac.dsa.project.entity.ChecklistItem;
+import edu.upc.eetac.dsa.project.entity.ChecklistitemCollection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,8 +60,8 @@ public class ChecklistItemDAOImpl implements ChecklistItemDAO {
             connection = Database.getConnection();
 
             stmt = connection.prepareStatement(ChecklistItemDAOQuery.CHECK_ITEM);
-            stmt.setString(1, userid);
-            stmt.setString(2, itemid);
+
+            stmt.setString(1, itemid);
 
             int rows = stmt.executeUpdate();
             if (rows == 1)
@@ -103,7 +104,39 @@ public class ChecklistItemDAOImpl implements ChecklistItemDAO {
             if (stmt != null) stmt.close();
             if (connection != null) connection.close();
         }
-
         return item;
     }
+
+    @Override
+    public ChecklistitemCollection getChecklistItems(String taskid) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ChecklistitemCollection items = new ChecklistitemCollection();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(ChecklistItemDAOQuery.GET_ITEMS_FROM_TASK);
+            stmt.setString(1, taskid);
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                ChecklistItem item = new ChecklistItem();
+                item.setId(rs.getString("id"));
+                item.setTaskid(rs.getString("taskid"));
+                item.setTitle(rs.getString("title"));
+                item.setChecked((rs.getBoolean("checked")));
+                item.setUser_checked(rs.getString("user_checked"));
+                items.getChecklistItems().add(item);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+        return items;
+    }
+
+
 }
